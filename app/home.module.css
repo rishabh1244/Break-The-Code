@@ -1,0 +1,82 @@
+.hero {
+    margin-top: 8rem;
+    width: 100%;
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text);
+}
+
+.title {
+    font-size: 3.2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.subtitle {
+    margin-top: 0.8rem;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--text-alt);
+    line-height: 1.6rem;
+}
+
+.buttons {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.btnPrimary {
+    padding: 0.75rem 1.5rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btnPrimary:hover {
+    background-color: red;
+    transform: translateY(-3px);
+}
+
+.btnSecondary {
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: 2px solid var(--accent);
+    color: var(--accent);
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btnSecondary:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+.features {
+    margin-top: 2.8rem;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    font-size: 0.98rem;
+    color: var(--text-alt);
+}
+
+.features span {
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    padding: 0.45rem 0.9rem;
+    border-radius: 6px;
+}

@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+
+:root {
+    --bg: #f6f3e9;
+    /* retro paper */
+    --bg-alt: #e7e3d4;
+    /* panel background */
+    --surface: #dad6c7;
+    /* containers/cards */
+    --text: #2a2a28;
+    /* strong charcoal */
+    --text-alt: #4f4b45;
+    --accent: #3b5374;
+    /* old UI blue */
+    --accent-hover: #2b3f58;
+    --border: #b8b3a6;
+    /* pronounced retro border */
+    --border-strong: #8f8a7e;
+    --shadow: rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="dark"] {
+    --bg: #1e1e1b;
+    --bg-alt: #242422;
+    --surface: #2f2f2c;
+    /* 👈 brighter than bg */
+    --text: #e8e8e3;
+    --text-alt: #b9b9af;
+    --accent: #6ea7c3;
+    --accent-hover: #486676;
+    --border: #3e3e38;
+    --border-strong: #6a6a62;
+    --shadow: rgba(0, 0, 0, 0.6);
+}
+
+:root {
+    --background: #ffffff;
+    --foreground: #171717;
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --font-sans: var(--font-geist-sans);
+    --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background: #0a0a0a;
+        --foreground: #ededed;
+    }
+}
+
+body {
+    font-family: "JetBrains Mono", monospace;
+    background-color: var(--bg-alt);
+
+    color: var(--foreground);
+}

@@ -1,0 +1,39 @@
+.togButton {
+    position: fixed;
+    bottom: 20px;
+    /* Distance from bottom */
+    right: 20px;
+    /* Distance from right */
+
+    width: 46px;
+    height: 46px;
+
+    background: var(--bg-alt);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.3rem;
+    color: var(--text);
+    font-family: "JetBrains Mono", monospace;
+
+    box-shadow: 0 6px 16px var(--shadow);
+    backdrop-filter: blur(6px);
+
+    z-index: 9999;
+    transition: all 0.25s ease;
+}
+
+.togButton:hover {
+    background-color: var(--accent);
+    color: #ffffff;
+    transform: translateY(-5px) scale(1.05);
+}
+
+.togButton:active {
+    transform: scale(0.95);
+}

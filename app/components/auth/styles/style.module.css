@@ -1,0 +1,101 @@
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: grid;
+    place-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    position: relative;
+    background: var(--surface);
+    border: 2px solid var(--border-strong);
+    padding: 2rem;
+    width: 360px;
+    box-shadow: 0 8px 30px var(--shadow);
+    border-radius: 6px;
+}
+
+.title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+}
+
+.form {
+    display: flex;
+    color: var(--text-alt);
+
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 0.5rem;
+    font-family: inherit;
+    color: var(--text);
+}
+
+.submitBtn {
+    background: var(--accent);
+    color: white;
+    padding: 0.6rem;
+    border: none;
+    cursor: pointer;
+}
+
+.submitBtn:hover {
+    background: var(--accent-hover);
+}
+
+.switch {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+}
+
+.switchBtn {
+    background: none;
+    color: var(--accent);
+    border: none;
+    cursor: pointer;
+}
+
+.error {
+    color: #b33a3a;
+    font-size: 0.8rem;
+}
+
+/* Close button */
+.closeBtn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: none;
+    border: none;
+    color: var(--text-alt);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.closeBtn:hover {
+    color: var(--accent);
+}
+
+.btn {
+    padding: 0.45rem 1rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--text-alt);
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+
+.btn:hover {
+    background-color: var(--accent);
+    color: #fafafa;
+}

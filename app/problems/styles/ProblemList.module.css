@@ -1,0 +1,81 @@
+.pageWrapper {
+    min-height: 100vh;
+    background: var(--bg-alt);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Main Container Box */
+.mainBox {
+    width: 100%;
+    max-width: 88%;
+    background: var(--bg);
+    border: 2px solid var(--border-strong);
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px var(--shadow);
+}
+
+.heading {
+    font-size: 1.6rem;
+    color: var(--text);
+    margin-bottom: 16px;
+    font-weight: 600;
+    border-bottom: 2px solid var(--bg);
+    padding-bottom: 6px;
+}
+
+/* NEW: Inner Box aligned with Main Box */
+.listWrapper {
+
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* List Items */
+.listItem {
+    display: grid;
+    grid-template-columns: 40px 1fr 100px;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+    transition: 0.15s;
+}
+
+.listItem:hover {
+    background: var(--bg-alt);
+}
+
+.index {
+    font-weight: 600;
+    color: var(--text-alt);
+}
+
+.title {
+    font-weight: 500;
+    text-decoration: none;
+    color: var(--text);
+}
+
+.title:hover {
+    color: var(--accent);
+}
+
+.difficulty {
+    text-align: right;
+    font-size: 0.85rem;
+    padding: 8px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    background: #c6f6d5;
+    color: #22543d;
+}
