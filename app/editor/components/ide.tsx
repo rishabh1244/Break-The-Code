@@ -1,9 +1,12 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
+
 import gruvboxTheme from "./themes/gruvboxTheme";
 import gruvboxLightTheme from "./themes/gruvboxThemeLight";
+
+import { auth } from "@/app/api/firebase/config";
 import "./styles/ide.css";
 
 const Editor = dynamic(
@@ -12,9 +15,7 @@ const Editor = dynamic(
 );
 
 export default function Ide({ fileName, metadata, code, setCode }) {
-
-
-    const handleEditorDidMount = (editor, monaco) => {
+    const handleEditorDidMount = async (editor, monaco) => {
 
         monaco.editor.defineTheme("gruvbox-dark", gruvboxTheme);
         monaco.editor.defineTheme("gruvbox-light", gruvboxLightTheme);
@@ -23,6 +24,7 @@ export default function Ide({ fileName, metadata, code, setCode }) {
         monaco.editor.setTheme(
             storedTheme === "dark" ? "gruvbox-dark" : "gruvbox-light"
         );
+
     };
 
     const [leftWidth, setLeftWidth] = useState(360);
@@ -47,9 +49,35 @@ export default function Ide({ fileName, metadata, code, setCode }) {
     };
     const onCodeChange = (newCode) => {
         localStorage.setItem(`editor_code ${metadata.name}`, newCode);
-        console.log(localStorage.getItem(`editor_code ${metadata.name}`));
     }
 
+    const RunCode = async () => {
+        const user = auth.currentUser;
+
+        if (!user) {
+            console.log("Not logged in");
+            return;
+        }
+
+        const code = localStorage.getItem(`editor_code ${metadata.name}`);
+
+        const body: any = {
+            filename: fileName,
+        };
+
+        if (code !== null) {
+            body.code = code;
+        }
+
+        const token = await user.getIdToken();
+        const res = await fetch(`/api/problems?slug=${metadata.name.replace(/ /g, "_")}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, },
+            body: JSON.stringify(body),
+        })
+        const data = await res.json();
+        console.log(data);
+    }
 
 
     if (!metadata) {
@@ -63,7 +91,7 @@ export default function Ide({ fileName, metadata, code, setCode }) {
                 </div>
 
                 <div className="ide-topbar-right">
-                    <button className="ide-btn run-btn">▶ Run</button>
+                    <button className="ide-btn run-btn" onClick={RunCode}>▶ Run</button>
                     <button className="ide-btn console-btn">▢ Console</button>
                 </div>
             </div>

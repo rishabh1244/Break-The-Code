@@ -5,9 +5,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "./styles/style.module.css";
 import Auth from "../auth/Auth";
-import { auth } from "@/api/firebase/config";
 import { onAuthStateChanged, User } from "firebase/auth";
-
+import { auth } from "@/app/api/firebase/config";
 const Navbar = () => {
     const [user, setUser] = useState<User | null>(null);
     const [showAuth, setShowAuth] = useState(false);

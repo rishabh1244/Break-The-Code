@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { auth, db } from "@/api/firebase/config";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import styles from "./styles/style.module.css";
-
+import { auth, db } from "@/app/api/firebase/config";
 export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
