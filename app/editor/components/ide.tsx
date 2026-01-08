@@ -6,6 +6,7 @@ import { useEffect, useEffectEvent, useState } from "react";
 import gruvboxTheme from "./themes/gruvboxTheme";
 import gruvboxLightTheme from "./themes/gruvboxThemeLight";
 
+import Outputmodal from "./Outputmodal";
 import { auth } from "@/app/api/firebase/config";
 import "./styles/ide.css";
 
@@ -29,6 +30,11 @@ export default function Ide({ fileName, metadata, code, setCode }) {
 
     const [leftWidth, setLeftWidth] = useState(360);
     const [showSidebar, setShowSidebar] = useState(true);
+
+    const [showOutput, setShowOutput] = useState(false);
+    const [resultVal, setResult] = useState<any>(null);
+
+    const [isRunning, setIsRunning] = useState(false);
 
     const startDrag = (e: React.MouseEvent) => {
         const startX = e.clientX;
@@ -58,7 +64,7 @@ export default function Ide({ fileName, metadata, code, setCode }) {
             console.log("Not logged in");
             return;
         }
-
+        setIsRunning(true);
         const code = localStorage.getItem(`editor_code ${metadata.name}`);
 
         const body: any = {
@@ -76,9 +82,10 @@ export default function Ide({ fileName, metadata, code, setCode }) {
             body: JSON.stringify(body),
         })
         const data = await res.json();
-        console.log(data);
+        setResult(data.message);
+        setShowOutput(true);
+        setIsRunning(false);
     }
-
 
     if (!metadata) {
         return <div >Loading problem…</div>;
@@ -91,8 +98,22 @@ export default function Ide({ fileName, metadata, code, setCode }) {
                 </div>
 
                 <div className="ide-topbar-right">
-                    <button className="ide-btn run-btn" onClick={RunCode}>▶ Run</button>
-                    <button className="ide-btn console-btn">▢ Console</button>
+                    <button
+                        className="ide-btn run-btn"
+                        onClick={RunCode}
+                        disabled={isRunning}
+                    >
+                        {isRunning ? (
+                            <span className="run-loading">
+                                <span className="loader" />
+                                Running
+                            </span>
+                        ) : (
+                            "▶ Run"
+                        )}
+                    </button>
+
+                    <button className="ide-btn console-btn" onClick={() => { setShowOutput(true) }}>Output</button>
                 </div>
             </div>
             <div className="ide-container">
@@ -168,6 +189,12 @@ export default function Ide({ fileName, metadata, code, setCode }) {
                     />
                 </div>
             </div>
+            {showOutput && resultVal && (
+                <Outputmodal
+                    resultVal={resultVal}
+                    onClose={() => setShowOutput(false)}
+                />
+            )}
         </div>
     );
 }

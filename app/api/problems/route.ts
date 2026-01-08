@@ -1,11 +1,18 @@
 import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+
+
 const OWNER = "rishabh1244";
 const REPO = "problem-set";
 const BRANCH = "main";
+
+
 import { adminAuth } from "../firebase/firebase-admin";
 const BASE_DIR = path.join(process.cwd(), "../btc-jobs", "problems");
+
+
+import { compile_code } from "./compile";
 
 type GitHubContentItem = {
     name: string;
@@ -117,14 +124,13 @@ export async function POST(req: Request) {
             const shaPath = path.join(localPath, ".sha.json");
             const shaJson = JSON.stringify(shaObj, null, 2);
             fs.writeFileSync(shaPath, shaJson);
-
-            const filePath = path.join(localPath, `/code/${filename}`);
-            fs.writeFileSync(filePath, code)
-            console.log(filePath);
+            fs.writeFileSync(path.join(localPath, `/code/${filename}`), code);
+            const output = await compile_code("cpp", localPath.toString());
+            console.log(output);
             return NextResponse.json({
                 success: true,
                 storedAt: localPath,
-                message: "fetched sucessfully",
+                message: output,
             });
         } catch (err: any) {
             return NextResponse.json(

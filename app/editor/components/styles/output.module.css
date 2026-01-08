@@ -1,0 +1,80 @@
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: grid;
+    place-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    position: relative;
+    background: var(--surface);
+    border: 2px solid var(--border-strong);
+    padding: 2rem;
+    width: 360px;
+    box-shadow: 0 8px 30px var(--shadow);
+    border-radius: 6px;
+}
+
+.closeBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--text);
+}
+
+.title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: var(--text);
+}
+
+
+.results {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+.testBox {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 0.8rem;
+    border-radius: 4px;
+    font-weight: 500;
+    border: 1px solid transparent;
+}
+
+.pass {
+    background: rgba(0, 200, 0, 0.15);
+    border-color: rgba(0, 200, 0, 0.4);
+    color: #2ecc71;
+}
+
+.fail {
+    background: rgba(255, 0, 0, 0.15);
+    border-color: rgba(255, 0, 0, 0.4);
+    color: #e74c3c;
+}
+
+.input {
+    font-family: monospace;
+}
+
+.status {
+    font-weight: 700;
+}
+
+
+.comment {
+    margin-top: 0.8rem;
+    text-align: center;
+    font-style: italic;
+    color: var(--text-muted);
+}

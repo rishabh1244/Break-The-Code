@@ -18,6 +18,7 @@ export default function EditorPage() {
     const [fileName, setFileName] = useState<string | null>(null);
     const [code, setCode] = useState<string>("");
     const [metadata, setMetadata] = useState<string>("");
+
     useEffect(() => {
         if (!slug) return;
 
