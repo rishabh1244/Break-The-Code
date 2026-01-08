@@ -48,7 +48,6 @@
 
     border: 1px solid var(--border);
     border-radius: 4px;
-
     cursor: pointer;
 
     transition:
@@ -58,19 +57,14 @@
         border-color 0.15s ease;
 }
 
-/* Hover: hint of action */
 .ide-btn:hover {
     background: var(--bg-alt);
-    border-color: #4ade80;
-    /* soft green */
+    border-color: var(--border-strong);
 }
 
-/* Active / click: satisfying press */
 .ide-btn:active {
     background: #16a34a;
-    /* solid green */
     color: #ecfdf5;
-    /* near-white */
     border-color: #16a34a;
 
     transform: translateY(1px) scale(0.98);
@@ -80,13 +74,11 @@
         0 0 0 1px rgba(22, 163, 74, 0.35);
 }
 
-/* Optional: keyboard accessibility */
 .ide-btn:focus-visible {
     outline: none;
     box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.5);
 }
 
-/* Primary Run button */
 .run-btn {
     background: var(--accent);
     color: #fafafa;

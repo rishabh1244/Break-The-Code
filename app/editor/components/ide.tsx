@@ -143,7 +143,7 @@ export default function Ide({ fileName, metadata, code, setCode }) {
                                     <div className="meta_tags">
                                         {metadata.tags.map((tag: string) => (
                                             <span key={tag} className="meta_pill">
-                                                {tag}
+                                                {tag + " "}
                                             </span>
                                         ))}
                                     </div>

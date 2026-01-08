@@ -1,6 +1,6 @@
 "use client"
 import styles from "./styles/output.module.css"
-
+import { useState, useEffect } from "react";
 type TestResult = {
     input: string;
     status: "PASS" | "FAIL";
@@ -44,7 +44,23 @@ const comments = {
     ],
 };
 const Outputmodal = ({ resultVal, onClose }: OutputModalProps) => {
-    // 🚨 CASE 1: compilation failed
+
+    const [isRunning, setIsRunning] = useState(false);
+    const [disableLLM, setDisableLLM] = useState(false);
+    useEffect(() => {
+        if (!resultVal.compiled) return;
+
+        const hasFailure = resultVal.tests.some(
+            (test) => test.status !== "PASS"
+        );
+
+        setDisableLLM(hasFailure);
+    }, [resultVal]);
+    function reqLLM() {
+        setIsRunning(true);
+
+    }
+
     if (resultVal.compiled === false) {
         return (
             <div className={styles.backdrop}>
@@ -54,23 +70,47 @@ const Outputmodal = ({ resultVal, onClose }: OutputModalProps) => {
                     </button>
 
                     <h2 className={styles.title}>Compilation Failed</h2>
-
+                    {/*
                     <div className={`${styles.testBox} ${styles.fail}`}>
                         <span className={styles.input}>Compiled</span>
                         <span className={styles.status}>FAIL</span>
                     </div>
-
+*/}
+                    <div className={styles.errorBox}>
+                        <pre className={styles.errorText}>
+                            {resultVal.error}
+                        </pre>
+                    </div>
+                    {/*
                     <div className={styles.comment}>
                         {comments.compileFail[
                             Math.floor(Math.random() * comments.compileFail.length)
                         ]}
                     </div>
+                    */}
+                    <br />
+                    <div style={{ display: "flex", justifyContent: "center" }}>
+                        <button
+                            className="ide-btn run-btn"
+                            onClick={reqLLM}
+                            disabled={isRunning}
+                        >
+                            {isRunning ? (
+                                <span className="run-loading">
+                                    <span className="loader" />
+                                    LLM Thinking
+                                </span>
+                            ) : (
+                                "Challenge LLM"
+                            )}
+                        </button>
+                    </div>
+
                 </div>
             </div>
         );
     }
 
-    // ✅ CASE 2: compilation succeeded
     const tests = resultVal.tests;
 
     const fails = tests.filter(t => t.status === "FAIL").length;
@@ -94,7 +134,9 @@ const Outputmodal = ({ resultVal, onClose }: OutputModalProps) => {
 
                 <h2 className={styles.title}>Test Results</h2>
                 <div className={styles.results}>
+
                     {tests.map((t, i) => (
+
                         <div
                             key={i}
                             className={`${styles.testBox} ${t.status === "PASS" ? styles.pass : styles.fail
@@ -104,9 +146,25 @@ const Outputmodal = ({ resultVal, onClose }: OutputModalProps) => {
                             <span className={styles.status}>{t.status}</span>
                         </div>
                     ))}
+
+                </div>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                    <button
+                        className="ide-btn run-btn"
+                        onClick={reqLLM}
+                        disabled={disableLLM || isRunning}
+                    >
+                        {isRunning ? (
+                            <span className="run-loading">
+                                <span className="loader" />
+                                LLM Thinking
+                            </span>
+                        ) : (
+                            "Challenge LLM"
+                        )}
+                    </button>
                 </div>
 
-                <div className={styles.comment}>{comment}</div>
             </div>
         </div>
     );
