@@ -2,15 +2,12 @@ import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
-
 const OWNER = "rishabh1244";
 const REPO = "problem-set";
 const BRANCH = "main";
 
-
-import { adminAuth } from "../firebase/firebase-admin";
+import { requireAuth } from "../firebase/requireAuth";
 const BASE_DIR = path.join(process.cwd(), "../btc-jobs", "problems");
-
 
 import { compile_code } from "./compile";
 
@@ -55,7 +52,6 @@ async function downloadDir(
             await downloadDir(item.path, target, shaObj, oldShaObj);
             continue;
         }
-
         if (item.type === "file" && item.download_url) {
             if (oldShaObj[relPath] === item.sha) {
                 shaObj[relPath] = item.sha;
@@ -83,26 +79,15 @@ async function downloadDir(
 export async function POST(req: Request) {
     const { searchParams } = new URL(req.url);
     const slug = searchParams.get("slug");
-
-    const authHeader = req.headers.get("authorization");
     const { code, filename } = await req.json();
 
-    if (!authHeader?.startsWith("Bearer ")) {
-        return NextResponse.json(
-            { error: "Unauthorized" },
-            { status: 401 }
-        );
-    }
-
-    const token = authHeader.split("Bearer ")[1];
+    //fireabase verification     
+    const auth = await requireAuth(req);
+    if ("error" in auth) return auth.error;
 
     try {
-        const decodedToken = await adminAuth.verifyIdToken(token);
 
-        const uid = decodedToken.uid;
-        const email = decodedToken.email;
 
-        console.log("User:", uid, email);
         if (!slug) {
             return NextResponse.json(
                 { error: "Missing slug" },
@@ -113,6 +98,7 @@ export async function POST(req: Request) {
 
         let oldShaObj: Record<string, string> = {};
         const shaPath = path.join(localPath, ".sha.json");
+
         if (fs.existsSync(shaPath)) {
             const raw = fs.readFileSync(shaPath, "utf8");
             oldShaObj = JSON.parse(raw);
@@ -123,10 +109,12 @@ export async function POST(req: Request) {
 
             const shaPath = path.join(localPath, ".sha.json");
             const shaJson = JSON.stringify(shaObj, null, 2);
+
             fs.writeFileSync(shaPath, shaJson);
             fs.writeFileSync(path.join(localPath, `/code/${filename}`), code);
+
             const output = await compile_code("cpp", localPath.toString());
-            console.log(output);
+
             return NextResponse.json({
                 success: true,
                 storedAt: localPath,

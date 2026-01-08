@@ -1,13 +1,18 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import styles from "./styles/style.module.css";
 import Auth from "../auth/Auth";
+
+import { useEffect, useState } from "react";
+
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "@/app/api/firebase/config";
+
+import styles from "./styles/style.module.css";
+
 const Navbar = () => {
+
     const [user, setUser] = useState<User | null>(null);
     const [showAuth, setShowAuth] = useState(false);
 

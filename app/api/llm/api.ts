@@ -23,7 +23,7 @@ export const chatLLM = async (prompt: string) => {
             }),
         }
     );
-    return response;
+    return response.json();
 }
 
 

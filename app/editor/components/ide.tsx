@@ -8,6 +8,7 @@ import gruvboxLightTheme from "./themes/gruvboxThemeLight";
 
 import Outputmodal from "./Outputmodal";
 import { auth } from "@/app/api/firebase/config";
+import Auth from "@/app/components/auth/Auth";
 import "./styles/ide.css";
 
 const Editor = dynamic(
@@ -16,6 +17,16 @@ const Editor = dynamic(
 );
 
 export default function Ide({ fileName, metadata, code, setCode }) {
+    const [showAuth, setShowAuth] = useState(false);
+
+    const [leftWidth, setLeftWidth] = useState(360);
+    const [showSidebar, setShowSidebar] = useState(true);
+
+    const [showOutput, setShowOutput] = useState(false);
+    const [resultVal, setResult] = useState<any>(null);
+
+    const [isRunning, setIsRunning] = useState(false);
+
     const handleEditorDidMount = async (editor, monaco) => {
 
         monaco.editor.defineTheme("gruvbox-dark", gruvboxTheme);
@@ -27,14 +38,6 @@ export default function Ide({ fileName, metadata, code, setCode }) {
         );
 
     };
-
-    const [leftWidth, setLeftWidth] = useState(360);
-    const [showSidebar, setShowSidebar] = useState(true);
-
-    const [showOutput, setShowOutput] = useState(false);
-    const [resultVal, setResult] = useState<any>(null);
-
-    const [isRunning, setIsRunning] = useState(false);
 
     const startDrag = (e: React.MouseEvent) => {
         const startX = e.clientX;
@@ -61,7 +64,7 @@ export default function Ide({ fileName, metadata, code, setCode }) {
         const user = auth.currentUser;
 
         if (!user) {
-            console.log("Not logged in");
+            setShowAuth(true);
             return;
         }
         setIsRunning(true);
@@ -193,7 +196,12 @@ export default function Ide({ fileName, metadata, code, setCode }) {
                 <Outputmodal
                     resultVal={resultVal}
                     onClose={() => setShowOutput(false)}
+                    probName={metadata.name}
                 />
+            )}
+
+            {showAuth && (
+                <Auth onClose={() => setShowAuth(false)} />
             )}
         </div>
     );

@@ -1,6 +1,8 @@
 "use client"
 import styles from "./styles/output.module.css"
 import { useState, useEffect } from "react";
+import { auth } from "@/app/api/firebase/config";
+
 type TestResult = {
     input: string;
     status: "PASS" | "FAIL";
@@ -18,6 +20,7 @@ type ResultPayload =
 type OutputModalProps = {
     resultVal: ResultPayload;
     onClose: () => void;
+    probName: string;
 };
 const comments = {
     perfect: [
@@ -43,7 +46,7 @@ const comments = {
         "The compiler is disappointed.",
     ],
 };
-const Outputmodal = ({ resultVal, onClose }: OutputModalProps) => {
+const Outputmodal = ({ resultVal, onClose, probName }: OutputModalProps) => {
 
     const [isRunning, setIsRunning] = useState(false);
     const [disableLLM, setDisableLLM] = useState(false);
@@ -56,8 +59,21 @@ const Outputmodal = ({ resultVal, onClose }: OutputModalProps) => {
 
         setDisableLLM(hasFailure);
     }, [resultVal]);
-    function reqLLM() {
-        setIsRunning(true);
+    async function reqLLM() {
+        const user = auth.currentUser;
+
+        if (!user) return;
+
+        const token = await user.getIdToken();
+        const res = await fetch(`/api/llm`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, },
+            body: JSON.stringify({
+                problemName: probName,
+            }),
+        })
+        const data = await res.json();
+        console.log(data);
 
     }
 
