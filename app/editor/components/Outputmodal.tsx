@@ -21,6 +21,7 @@ type OutputModalProps = {
     resultVal: ResultPayload;
     onClose: () => void;
     probName: string;
+    filename: string;
 };
 const comments = {
     perfect: [
@@ -46,7 +47,7 @@ const comments = {
         "The compiler is disappointed.",
     ],
 };
-const Outputmodal = ({ resultVal, onClose, probName }: OutputModalProps) => {
+const Outputmodal = ({ resultVal, onClose, probName, filename }: OutputModalProps) => {
 
     const [isRunning, setIsRunning] = useState(false);
     const [disableLLM, setDisableLLM] = useState(false);
@@ -70,10 +71,11 @@ const Outputmodal = ({ resultVal, onClose, probName }: OutputModalProps) => {
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, },
             body: JSON.stringify({
                 problemName: probName,
+                filename,
             }),
         })
         const data = await res.json();
-        console.log(data);
+        console.log(data.raw);
 
     }
 
@@ -107,7 +109,7 @@ const Outputmodal = ({ resultVal, onClose, probName }: OutputModalProps) => {
                     <br />
                     <div style={{ display: "flex", justifyContent: "center" }}>
                         <button
-                            className="ide-btn run-btn"
+                            className={styles.ideBtn}
                             onClick={reqLLM}
                             disabled={isRunning}
                         >
@@ -166,13 +168,14 @@ const Outputmodal = ({ resultVal, onClose, probName }: OutputModalProps) => {
                 </div>
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <button
-                        className="ide-btn run-btn"
+                        className={styles.ideBtn}
+
                         onClick={reqLLM}
                         disabled={disableLLM || isRunning}
                     >
                         {isRunning ? (
-                            <span className="run-loading">
-                                <span className="loader" />
+                            <span className={styles.runLoading}>
+                                <span className={styles.loader} />
                                 LLM Thinking
                             </span>
                         ) : (

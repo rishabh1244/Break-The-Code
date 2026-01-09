@@ -16,7 +16,7 @@ export const chatLLM = async (prompt: string) => {
                 "X-Title": "breakthecode-test",
             },
             body: JSON.stringify({
-                model: "meta-llama/llama-3-8b-instruct",
+                model: "nvidia/nemotron-3-nano-30b-a3b:free",
                 messages: [
                     { role: "user", content: prompt }
                 ],

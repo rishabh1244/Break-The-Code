@@ -197,6 +197,7 @@ export default function Ide({ fileName, metadata, code, setCode }) {
                     resultVal={resultVal}
                     onClose={() => setShowOutput(false)}
                     probName={metadata.name}
+                    filename={fileName}
                 />
             )}
 
