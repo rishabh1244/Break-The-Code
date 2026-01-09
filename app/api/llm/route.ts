@@ -5,6 +5,7 @@ import path from "path";
 
 import { requireAuth } from "../firebase/requireAuth";
 import { chatLLM } from "./api";
+import { compile_code } from "../problems/compile";
 
 const generalPrompt = `
 You are an expert competitive programming code-fixing engine.
@@ -61,6 +62,7 @@ export async function POST(req: Request) {
 
     await fs.mkdir(BASE_DIR, { recursive: true });
     await fs.cp(from, to, { recursive: true });
+
     // collect metadata from fs
     const metadataPath = path.join(BASE_DIR, probName, "./metadata.json");
     const srcFilePath = path.join(SRC_DIR, probName, `./code/${filename}`);
@@ -87,7 +89,7 @@ export async function POST(req: Request) {
         );
     }
     const metadata = JSON.parse(file);
-    const LLMPrompt = generalPrompt + ` filename : ${filename} ${metadata.prompt} ${code}`;
+    const LLMPrompt = generalPrompt + `filename : ${filename} ${metadata.prompt} ${code}`;
     const result = await chatLLM(LLMPrompt);
 
     let parsed;
@@ -98,14 +100,14 @@ export async function POST(req: Request) {
     }
     const output = parsed.fixed_code;
 
-    console.log(output);
     const outputFilePath = path.join(BASE_DIR, probName, `./code/${filename}`);
     await fs.writeFile(outputFilePath, output.toString());
 
+    const code_output = await compile_code("cpp", path.join(BASE_DIR, probName).toString());
 
     return NextResponse.json(
         {
-            message: "ok"
+            message: code_output
         },
         { status: 200 }
     );

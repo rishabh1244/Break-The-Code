@@ -1,8 +1,9 @@
 "use client"
 import styles from "./styles/output.module.css"
 import { useState, useEffect } from "react";
-import { auth } from "@/app/api/firebase/config";
 
+import { auth } from "@/app/api/firebase/config";
+import LLMResult from "./LLMResult";
 type TestResult = {
     input: string;
     status: "PASS" | "FAIL";
@@ -23,34 +24,16 @@ type OutputModalProps = {
     probName: string;
     filename: string;
 };
-const comments = {
-    perfect: [
-        "You cooked 🔥",
-        "All tests passed, respect 👑",
-        "Clean run. Zero bugs.",
-    ],
-    mixed: [
-        "Almost there 👀",
-        "One bug away from greatness",
-        "Code gods are watching…",
-    ],
-    fail: [
-        "You broke the code 💀",
-        "What was the plan here?",
-        "Tests had other ideas",
-    ],
-    compileFail: [
-        "It didn’t even compile 💀",
-        "Compiler said: absolutely not.",
-        "Syntax error speedrun any%",
-        "Bro forgot a semicolon",
-        "The compiler is disappointed.",
-    ],
-};
 const Outputmodal = ({ resultVal, onClose, probName, filename }: OutputModalProps) => {
 
     const [isRunning, setIsRunning] = useState(false);
     const [disableLLM, setDisableLLM] = useState(false);
+    const [switchModalDisplay, setSwitchModalDisplay] = useState(false);
+
+    const [llmResult, setLLMResult] = useState<any>(null);
+
+    const hasLLMResult = llmResult !== null;
+
     useEffect(() => {
         if (!resultVal.compiled) return;
 
@@ -61,6 +44,7 @@ const Outputmodal = ({ resultVal, onClose, probName, filename }: OutputModalProp
         setDisableLLM(hasFailure);
     }, [resultVal]);
     async function reqLLM() {
+        setIsRunning(true);
         const user = auth.currentUser;
 
         if (!user) return;
@@ -75,10 +59,24 @@ const Outputmodal = ({ resultVal, onClose, probName, filename }: OutputModalProp
             }),
         })
         const data = await res.json();
-        console.log(data.raw);
+        console.log(data.message);
 
+        setLLMResult(data.message);
+        setIsRunning(false);
+        setSwitchModalDisplay(true);
     }
 
+    if (switchModalDisplay) {
+        return (
+            <LLMResult
+                resultVal={llmResult}
+                onClose={onClose}
+                onBack={() => setSwitchModalDisplay(false)}
+            >
+
+            </LLMResult>
+        )
+    }
     if (resultVal.compiled === false) {
         return (
             <div className={styles.backdrop}>
@@ -111,7 +109,7 @@ const Outputmodal = ({ resultVal, onClose, probName, filename }: OutputModalProp
                         <button
                             className={styles.ideBtn}
                             onClick={reqLLM}
-                            disabled={isRunning}
+                            disabled={disableLLM || isRunning || hasLLMResult}
                         >
                             {isRunning ? (
                                 <span className="run-loading">
@@ -123,6 +121,16 @@ const Outputmodal = ({ resultVal, onClose, probName, filename }: OutputModalProp
                             )}
                         </button>
                     </div>
+                    {hasLLMResult && (
+                        <button
+                            className={styles.backBtn}
+                            onClick={() => setSwitchModalDisplay(true)}
+                            style={{ marginTop: "8px" }}
+                        >
+                            →
+                        </button>
+                    )}
+
 
                 </div>
             </div>
@@ -131,17 +139,6 @@ const Outputmodal = ({ resultVal, onClose, probName, filename }: OutputModalProp
 
     const tests = resultVal.tests;
 
-    const fails = tests.filter(t => t.status === "FAIL").length;
-
-    const commentPool =
-        fails === 0
-            ? comments.perfect
-            : fails === tests.length
-                ? comments.fail
-                : comments.mixed;
-
-    const comment =
-        commentPool[Math.floor(Math.random() * commentPool.length)];
 
     return (
         <div className={styles.backdrop}>
@@ -183,6 +180,18 @@ const Outputmodal = ({ resultVal, onClose, probName, filename }: OutputModalProp
                         )}
                     </button>
                 </div>
+                {hasLLMResult && (
+                    <button
+                        onClick={() => setSwitchModalDisplay(true)}
+                        className={styles.backBtn}
+                        aria-label="Back to your result"
+                    >
+                        →
+                    </button>
+
+
+                )}
+
 
             </div>
         </div>

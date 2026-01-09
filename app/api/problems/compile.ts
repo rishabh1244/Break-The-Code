@@ -21,6 +21,8 @@ export function compile_code(language: string, dir: string) {
     let image: string;
     let command: string;
 
+    console.log(dir);
+
     if (language === "cpp") {
         image = "gcc:13";
         command = "make";

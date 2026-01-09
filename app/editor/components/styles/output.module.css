@@ -30,6 +30,7 @@
 
 .title {
     font-size: 1.3rem;
+    margin-left: 15%;
     margin-bottom: 1rem;
     color: var(--text);
 }
@@ -171,4 +172,30 @@
 .ideBtn:focus-visible {
     outline: none;
     box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.5);
+}
+
+.backBtn {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+
+    background: transparent;
+    border: none;
+    color: #fff;
+
+    font-size: 22px;
+    cursor: pointer;
+
+    padding: 6px 10px;
+    border-radius: 8px;
+
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.backBtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.backBtn:active {
+    transform: scale(0.95);
 }
