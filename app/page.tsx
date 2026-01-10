@@ -9,7 +9,7 @@ import ToggleTheme from "./components/toggle_theme/ToggleTheme";
 
 export default function Home() {
 
-    const { problemList, listProblems } = useContext(ProblemListContext);
+    const { problemList, listProblems } = (useContext(ProblemListContext) as any);
 
     useEffect(() => {
         listProblems();

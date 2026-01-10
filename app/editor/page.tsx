@@ -2,7 +2,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import problemStyles from "./styles/problemStyles.module.css";
 
 import ToggleTheme from "../components/toggle_theme/ToggleTheme";
@@ -11,7 +11,7 @@ import Ide from "./components/ide";
 
 const GITHUB_API = process.env.NEXT_PUBLIC_GITHUB_API!;
 
-export default function EditorPage() {
+function EditorContent() {
     const params = useSearchParams();
     const slug = params.get("slug");
 
@@ -79,3 +79,10 @@ export default function EditorPage() {
     );
 }
 
+export default function EditorPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <EditorContent />
+        </Suspense>
+    );
+}

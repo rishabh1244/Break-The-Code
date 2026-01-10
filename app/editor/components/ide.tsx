@@ -32,8 +32,7 @@ export default function Ide({ fileName, metadata, code, setCode }: IdeProps) {
     const [resultVal, setResult] = useState<any>(null);
 
     const [isRunning, setIsRunning] = useState(false);
-
-    const handleEditorDidMount = async (editor, monaco) => {
+    const handleEditorDidMount = async (editor: any, monaco: any) => {
 
         monaco.editor.defineTheme("gruvbox-dark", gruvboxTheme);
         monaco.editor.defineTheme("gruvbox-light", gruvboxLightTheme);
@@ -62,8 +61,8 @@ export default function Ide({ fileName, metadata, code, setCode }: IdeProps) {
         window.addEventListener("mousemove", onMouseMove);
         window.addEventListener("mouseup", onMouseUp);
     };
-    const onCodeChange = (newCode) => {
-        localStorage.setItem(`editor_code ${metadata.name}`, newCode);
+    const onCodeChange = (newCode: any) => {
+        localStorage.setItem(`editor_code ${(metadata.name as any)}`, newCode);
     }
 
     const RunCode = async () => {
@@ -74,7 +73,7 @@ export default function Ide({ fileName, metadata, code, setCode }: IdeProps) {
             return;
         }
         setIsRunning(true);
-        const code = localStorage.getItem(`editor_code ${metadata.name}`);
+        const code = localStorage.getItem(`editor_code ${(metadata.name as any)}`);
 
         const body: any = {
             filename: fileName,
@@ -85,7 +84,7 @@ export default function Ide({ fileName, metadata, code, setCode }: IdeProps) {
         }
 
         const token = await user.getIdToken();
-        const res = await fetch(`/api/problems?slug=${metadata.name.replace(/ /g, "_")}`, {
+        const res = await fetch(`/api/problems?slug=${(metadata.name as any).replace(/ /g, "_")}`, {
             method: "POST",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, },
             body: JSON.stringify(body),
@@ -103,7 +102,7 @@ export default function Ide({ fileName, metadata, code, setCode }: IdeProps) {
         <div className="ide-wrapper">
             <div className="ide-topbar floating">
                 <div className="ide-topbar-left">
-                    <span className="ide-filename">{metadata.name}</span>
+                    <span className="ide-filename">{(metadata.name as any)}</span>
                 </div>
 
                 <div className="ide-topbar-right">
@@ -132,25 +131,25 @@ export default function Ide({ fileName, metadata, code, setCode }: IdeProps) {
                         style={{ width: leftWidth }}
                     >
                         <div className="meta-panel">
-                            <h1 className="meta-title">{metadata.name}</h1>
+                            <h1 className="meta-title">{(metadata.name as any)}</h1>
 
-                            <p className="meta-desc">{metadata.description}</p>
+                            <p className="meta-desc">{(metadata.description as any)}</p>
 
                             <div className="meta-section">
                                 <h3>Prompt</h3>
-                                <p>{metadata.prompt}</p>
+                                <p>{(metadata.prompt as any)}</p>
                             </div>
 
                             <div className="meta-section">
                                 <h3>Tech</h3>
-                                <span className="meta-pill">{metadata.Tech}</span>
+                                <span className="meta-pill">{(metadata.Tech as any)}</span>
                             </div>
 
-                            {metadata.tags && (
+                            {(metadata.tags as any) && (
                                 <div className="meta_section">
                                     <h3 className="meta_heading">Tags</h3>
                                     <div className="meta_tags">
-                                        {metadata.tags.map((tag: string) => (
+                                        {((metadata.tags as any) as any[]).map((tag: string) => (
                                             <span key={tag} className="meta_pill">
                                                 {tag + " "}
                                             </span>
@@ -160,7 +159,7 @@ export default function Ide({ fileName, metadata, code, setCode }: IdeProps) {
                             )}
 
                             <div className="meta-footer">
-                                Author: <strong>{metadata.author}</strong>
+                                Author: <strong>{(metadata.author as any)}</strong>
                             </div>
                         </div>
                     </div>
@@ -184,8 +183,8 @@ export default function Ide({ fileName, metadata, code, setCode }: IdeProps) {
                     <Editor
                         height="100%"
                         defaultLanguage="cpp"
-                        value={localStorage.getItem(`editor_code ${metadata.name}`) ? localStorage.getItem(`editor_code ${metadata.name}`) : code}
-                        onChange={(value) => {
+                        value={(localStorage.getItem(`editor_code ${(metadata.name as any)}`) || code) as any}
+                        onChange={(value: any) => {
                             onCodeChange(value);
                         }}
                         onMount={handleEditorDidMount}
@@ -202,7 +201,7 @@ export default function Ide({ fileName, metadata, code, setCode }: IdeProps) {
                 <Outputmodal
                     resultVal={resultVal}
                     onClose={() => setShowOutput(false)}
-                    probName={metadata.name}
+                    probName={(metadata.name as any)}
                     filename={fileName}
                 />
             )}
