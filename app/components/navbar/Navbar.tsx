@@ -8,9 +8,9 @@ import { useEffect, useState } from "react";
 
 import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "@/app/api/firebase/config";
-
+import Image from "next/image";
 import styles from "./styles/style.module.css";
-
+import icon from "../../favicon.png"
 const Navbar = () => {
 
     const [user, setUser] = useState<User | null>(null);
@@ -32,8 +32,9 @@ const Navbar = () => {
             <nav className={styles.navbar}>
                 <div className={styles.container}>
                     <Link href="/" className={styles.logo}>
-                        <span className={styles.logoIcon}>{'</>'}</span>
-                        <span>Break the Code</span>
+                        <span className={styles.logoIcon}>
+                            <Image src={icon} alt="Break The Code" width={70} height={70} />
+                        </span>
                     </Link>
                     <ul className={styles.navLinks}>
                         <li><Link href="/problems" className={styles.navLink}>Problems</Link></li>
