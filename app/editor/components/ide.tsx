@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useEffectEvent, useState } from "react";
+import { useState } from "react";
 
 import gruvboxTheme from "./themes/gruvboxTheme";
 import gruvboxLightTheme from "./themes/gruvboxThemeLight";
@@ -15,8 +15,14 @@ const Editor = dynamic(
     () => import("@monaco-editor/react"),
     { ssr: false }
 );
+type IdeProps = {
+    fileName: string;
+    metadata: Record<string, unknown>;
 
-export default function Ide({ fileName, metadata, code, setCode }) {
+    code: string;
+    setCode: React.Dispatch<React.SetStateAction<string>>;
+};
+export default function Ide({ fileName, metadata, code, setCode }: IdeProps) {
     const [showAuth, setShowAuth] = useState(false);
 
     const [leftWidth, setLeftWidth] = useState(360);
