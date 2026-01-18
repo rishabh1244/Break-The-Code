@@ -84,7 +84,7 @@ export default function Ide({ fileName, metadata, code, setCode }: IdeProps) {
         }
 
         const token = await user.getIdToken();
-        const res = await fetch(`/api/problems?slug=${(metadata.name as any).replace(/ /g, "_")}`, {
+        const res = await fetch(`http://localhost:3001/api/compile?slug=${(metadata.name as any).replace(/ /g, "_")}`, {
             method: "POST",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}`, },
             body: JSON.stringify(body),
