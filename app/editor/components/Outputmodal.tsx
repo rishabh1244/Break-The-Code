@@ -36,6 +36,7 @@ const Outputmodal = ({ resultVal, onClose, probName, filename }: OutputModalProp
 
     useEffect(() => {
         if (!resultVal.compiled) return;
+        if (!resultVal.tests || !Array.isArray(resultVal.tests)) return;
 
         const hasFailure = resultVal.tests.some(
             (test) => test.status !== "PASS"
@@ -132,6 +133,25 @@ const Outputmodal = ({ resultVal, onClose, probName, filename }: OutputModalProp
                     )}
 
 
+                </div>
+            </div>
+        );
+    }
+
+    // Safety check: ensure tests exists and is an array
+    if (!resultVal.compiled || !resultVal.tests || !Array.isArray(resultVal.tests)) {
+        return (
+            <div className={styles.backdrop}>
+                <div className={styles.modal}>
+                    <button className={styles.closeBtn} onClick={onClose}>
+                        ✕
+                    </button>
+                    <h2 className={styles.title}>Error</h2>
+                    <div className={styles.errorBox}>
+                        <pre className={styles.errorText}>
+                            Invalid result format. Expected tests array.
+                        </pre>
+                    </div>
                 </div>
             </div>
         );
